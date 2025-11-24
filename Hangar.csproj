@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Hangar.ico</ApplicationIcon>
+    <!-- Path to a locally built SimConnect.NET.dll; place your DLL in ./lib by default -->
+    <SimConnectNetDllPath>$(MSBuildProjectDirectory)\lib\SimConnect.NET.dll</SimConnectNetDllPath>
+  </PropertyGroup>
+
+  <!-- Prefer a local DLL if present; otherwise, fall back to NuGet package -->
+  <Choose>
+    <When Condition="Exists('$(SimConnectNetDllPath)')">
+      <ItemGroup>
+        <Reference Include="SimConnect.NET">
+          <HintPath>$(SimConnectNetDllPath)</HintPath>
+          <Private>true</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="SimConnect.NET" Version="0.1.15-beta" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+  <!-- Copy native SimConnect.dll from lib to the ROOT of output (bin) and include in publish -->
+  <!-- Ensure the application/icon is embedded and available as a WPF resource -->
+  <ItemGroup>
+    <Resource Include="Assets\Hangar.ico" />
+  </ItemGroup>
+
+  <!-- Copy native SimConnect.dll from lib to the ROOT of output (bin) and include in publish -->
+  <ItemGroup>
+    <!-- Define the native DLL as an item; absolute path to avoid preserving the lib\ folder structure -->
+    <SimConnectNative Include="$(MSBuildProjectDirectory)\lib\SimConnect.dll" Condition="Exists('$(MSBuildProjectDirectory)\\lib\\SimConnect.dll')" />
+  </ItemGroup>
+
+  <!-- After build, copy SimConnect.dll to $(OutDir) root -->
+  <Target Name="CopySimConnectNative" AfterTargets="Build">
+    <Copy SourceFiles="@(SimConnectNative)" DestinationFiles="$(OutDir)SimConnect.dll" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- After publish, copy SimConnect.dll to $(PublishDir) root -->
+  <Target Name="CopySimConnectNativePublish" AfterTargets="Publish">
+    <Copy SourceFiles="@(SimConnectNative)" DestinationFiles="$(PublishDir)SimConnect.dll" SkipUnchangedFiles="true" Condition=" '$(PublishDir)' != '' " />
+  </Target>
+
+</Project>

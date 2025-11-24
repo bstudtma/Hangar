@@ -1,0 +1,70 @@
+﻿<Window x:Class="Hangar.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Hangar"
+        mc:Ignorable="d"
+    Title="Hangar"
+    Icon="Assets/Hangar.ico"
+    ShowInTaskbar="True"
+        Height="450"
+        Width="800">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+            <Button x:Name="SaveButton"
+                    Width="80"
+                    Margin="0,0,8,0"
+            Content="Capture"
+                    Click="SaveButton_Click"/>
+            <Button x:Name="ApplyButton"
+                    Width="80"
+                    Margin="0,0,8,0"
+                    Content="Apply"
+                    Click="ApplyButton_Click"/>
+            <Button x:Name="OpenConfigButton"
+                    Width="120"
+            Margin="0,0,8,0"
+                    Content="Open Config"
+                    Click="OpenConfigButton_Click"/>
+        <Button x:Name="OpenSimVarsDocsButton"
+            Width="160"
+            Margin="0,0,8,0"
+            Content="Open SimVars Docs"
+            ToolTip="Open online SimVars documentation"
+            Click="OpenSimVarsDocsButton_Click"/>
+        <ComboBox x:Name="PlaneSelector"
+              Width="200"
+              Margin="8,0,0,0"
+              ItemsSource="{Binding PlaneNames}"
+              SelectedItem="{Binding SelectedPlane, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <DataGrid x:Name="SimVarsGrid"
+              Grid.Row="1"
+              ItemsSource="{Binding SimVars}"
+              AutoGenerateColumns="False"
+              CanUserAddRows="True"
+              CanUserDeleteRows="True"
+              Margin="0,12,0,0"
+              IsReadOnly="False">
+            <DataGrid.Columns>
+            <DataGridTextColumn Header="SimVar"
+                        Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Width="*"/>
+            <DataGridTextColumn Header="Unit"
+                        Binding="{Binding Unit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Width="*"/>
+            <DataGridTextColumn Header="Value"
+                        Binding="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
