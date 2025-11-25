@@ -6,6 +6,8 @@ on:
 
 jobs:
   build-and-upload:
+    permissions:
+      contents: write
     # Only run for tags like v1.0.0, v2.0.0, etc.
     if: |
       startsWith(github.event.release.tag_name, 'v') &&
