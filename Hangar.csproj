@@ -61,4 +61,9 @@
     <Copy SourceFiles="@(SimConnectNative)" DestinationFiles="$(PublishDir)SimConnect.dll" SkipUnchangedFiles="true" Condition=" '$(PublishDir)' != '' " />
   </Target>
 
+  <ItemGroup>
+    <None Include="THIRD_PARTY_NOTICES.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="LICENSE" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
