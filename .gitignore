@@ -1,0 +1,84 @@
+## Build artifacts
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio cache/options
+.vs/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.g.cs
+*.g.i.cs
+*.baml
+*_wpftmp.*
+
+# NuGet packages
+*.nupkg
+packages/
+*.nuspec
+# NuGet Symbol Packages
+*.snupkg
+
+# MSBuild
+*.cache
+*.ilk
+*.log
+*.tlog
+*.pdb
+*.unsuccessfulbuild
+
+# Testing/coverage
+TestResult*/
+*.coverage
+*.coveragexml
+
+# Publish outputs
+*.publishsettings
+publish/
+**/app.publish/
+
+# Resharper / Rider
+_ReSharper*/
+*.DotSettings.user
+.idea/
+
+# Local tools
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# OS junk
+.DS_Store
+Thumbs.db
+*.swp
+~$*
+
+# Dotnet tooling
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# WPF specific
+*.opendb
+*.VC.db
+*.OpenCover.xml
+
+# ClickOnce
+**/ClientBin/
+**/app.publish/
+
+# Temporary files
+*.tmp
+*.temp

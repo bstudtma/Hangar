@@ -11,6 +11,17 @@
     <SimConnectNetDllPath>$(MSBuildProjectDirectory)\lib\SimConnect.NET.dll</SimConnectNetDllPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!-- Produce a compressed, self-contained single-file build for release -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <!-- Trimming WPF apps is risky; leave trimming disabled unless explicitly validated -->
+    <PublishTrimmed>false</PublishTrimmed>
+  </PropertyGroup>
+
   <!-- Prefer a local DLL if present; otherwise, fall back to NuGet package -->
   <Choose>
     <When Condition="Exists('$(SimConnectNetDllPath)')">
