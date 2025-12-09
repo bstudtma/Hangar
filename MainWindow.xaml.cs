@@ -860,7 +860,26 @@ public partial class MainWindow : Window
                 if (configItems.Any(ci => ci.EventMappings != null && ci.EventMappings.Count > 0))
                 {
                     var descriptors2 = await client.InputEvents.EnumerateInputEventsAsync(CancellationToken.None).ConfigureAwait(true);
-                    eventByName2 = descriptors2.ToDictionary(d => d.Name.Trim(), d => d, StringComparer.OrdinalIgnoreCase);
+                    // descriptors2 = descriptors2
+                    //     .Where(d => !string.IsNullOrWhiteSpace(d.Name))
+                    //     .GroupBy(d => d.Name.Trim(), StringComparer.OrdinalIgnoreCase)
+                    //     .Select(g => g.First())
+                    //     .ToArray();
+                    eventByName2 = new Dictionary<string, InputEventDescriptor>(StringComparer.OrdinalIgnoreCase);
+                    foreach (var descriptor in descriptors2)
+                    {
+                        var key = (descriptor.Name ?? string.Empty).Trim();
+                        if (key.Length == 0)
+                        {
+                            continue;
+                        }
+
+                        // Ignore duplicates by keeping the first descriptor encountered for each key.
+                        if (!eventByName2.ContainsKey(key))
+                        {
+                            eventByName2[key] = descriptor;
+                        }
+                    }
                     Debug.WriteLine($"[Apply] Enumerated {eventByName2.Count} input events at {__sw.Elapsed.TotalMilliseconds:F0} ms");
                 }
 
