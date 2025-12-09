@@ -11,7 +11,7 @@ jobs:
     # Only run for tags like v1.0.0, v2.0.0, etc.
     if: |
       startsWith(github.event.release.tag_name, 'v') &&
-      endsWith(github.event.release.tag_name, '.0.0')
+      endsWith(github.event.release.tag_name, '.0')
     runs-on: windows-latest
 
     steps:
