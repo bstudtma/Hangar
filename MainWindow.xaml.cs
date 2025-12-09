@@ -647,9 +647,14 @@ public partial class MainWindow : Window
                     item.DataType = simVarDataType;
                     item.IsSettable = isSettable;
 
+                    if (string.IsNullOrWhiteSpace(item.Name))
+                    {
+                        continue;
+                    }
+
                     if (string.IsNullOrWhiteSpace(item.Value))
                     {
-                        warnings.Add($"SimVar '{simVarName}' has no stored value and was skipped.");
+                        // warnings.Add($"SimVar '{simVarName}' has no stored value and was skipped.");
                         continue;
                     }
 
@@ -1363,7 +1368,22 @@ public partial class MainWindow : Window
                         {
                             var inputEvents = client.InputEvents;
                             var descriptors = await inputEvents.EnumerateInputEventsAsync(CancellationToken.None).ConfigureAwait(true);
-                            var eventByName = descriptors.ToDictionary(d => d.Name.Trim(), d => d, StringComparer.OrdinalIgnoreCase);
+                            // var eventByName = descriptors.ToDictionary(d => d.Name.Trim(), d => d, StringComparer.OrdinalIgnoreCase);
+                            var eventByName = new Dictionary<string, InputEventDescriptor>(StringComparer.OrdinalIgnoreCase);
+                            foreach (var descriptor in descriptors)
+                            {
+                                var key = (descriptor.Name ?? string.Empty).Trim();
+                                if (key.Length == 0)
+                                {
+                                    continue;
+                                }
+
+                                // Ignore duplicates by keeping the first descriptor encountered for each key.
+                                if (!eventByName.ContainsKey(key))
+                                {
+                                    eventByName[key] = descriptor;
+                                }
+                            }
 
                             if (eventByName.TryGetValue(match.EventName.Trim(), out var desc))
                             {
@@ -1406,7 +1426,21 @@ public partial class MainWindow : Window
                     {
                         var inputEvents = client.InputEvents;
                         var descriptors = await inputEvents.EnumerateInputEventsAsync(CancellationToken.None).ConfigureAwait(true);
-                        var eventByName = descriptors.ToDictionary(d => d.Name.Trim(), d => d, StringComparer.OrdinalIgnoreCase);
+                        var eventByName = new Dictionary<string, InputEventDescriptor>(StringComparer.OrdinalIgnoreCase);
+                        foreach (var descriptor in descriptors)
+                        {
+                            var key = (descriptor.Name ?? string.Empty).Trim();
+                            if (key.Length == 0)
+                            {
+                                continue;
+                            }
+
+                            // Ignore duplicates by keeping the first descriptor encountered for each key.
+                            if (!eventByName.ContainsKey(key))
+                            {
+                                eventByName[key] = descriptor;
+                            }
+                        }
 
                         if (!string.IsNullOrWhiteSpace(ev0) && string.Equals(ev0, ev1, StringComparison.OrdinalIgnoreCase) &&
                             eventByName.TryGetValue(ev0, out var interpDesc) &&
